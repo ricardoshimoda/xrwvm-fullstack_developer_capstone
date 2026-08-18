@@ -13,21 +13,22 @@ const dealerships_data = JSON.parse(fs.readFileSync("dealerships.json", 'utf8'))
 
 mongoose.connect("mongodb://mongo_db:27017/",{'dbName':'dealershipsDB'});
 
-
+/*
+ * Removes all (possible) previous data and initializes the database with data from
+ * what's defined in /data for reviews and dealerships 
+ */
 const Reviews = require('./review');
-
 const Dealerships = require('./dealership');
 
 try {
-  Reviews.deleteMany({}).then(()=>{
-    Reviews.insertMany(reviews_data['reviews']);
-  });
-  Dealerships.deleteMany({}).then(()=>{
-    Dealerships.insertMany(dealerships_data['dealerships']);
-  });
-  
+    Reviews.deleteMany({}).then(()=>{
+        Reviews.insertMany(reviews_data['reviews']);
+    });
+    Dealerships.deleteMany({}).then(()=>{
+        Dealerships.insertMany(dealerships_data['dealerships']);
+    });
 } catch (error) {
-  res.status(500).json({ error: 'Error fetching documents' });
+    res.status(500).json({ error: 'Error initiating database' });
 }
 
 
@@ -38,37 +39,52 @@ app.get('/', async (req, res) => {
 
 // Express route to fetch all reviews
 app.get('/fetchReviews', async (req, res) => {
-  try {
-    const documents = await Reviews.find();
-    res.json(documents);
-  } catch (error) {
-    res.status(500).json({ error: 'Error fetching documents' });
-  }
+    try {
+        const documents = await Reviews.find();
+        res.json(documents);
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching reviews' });
+    }
 });
 
 // Express route to fetch reviews by a particular dealer
 app.get('/fetchReviews/dealer/:id', async (req, res) => {
-  try {
-    const documents = await Reviews.find({dealership: req.params.id});
-    res.json(documents);
-  } catch (error) {
-    res.status(500).json({ error: 'Error fetching documents' });
-  }
+    try {
+        const documents = await Reviews.find({dealership: req.params.id});
+        res.json(documents);
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching reviews of a certain dealer with id: ' + req.params.is });
+    }
 });
 
 // Express route to fetch all dealerships
 app.get('/fetchDealers', async (req, res) => {
-//Write your code here
+    try {
+        const documents = await Dealerships.find();
+        res.json(documents);
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching dealers' });
+    }
 });
 
 // Express route to fetch Dealers by a particular state
 app.get('/fetchDealers/:state', async (req, res) => {
-//Write your code here
+    try {
+        const documents = await Dealerships.find({state: req.params.state});
+        res.json(documents);
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching dealerships of a certain state: ' + req.params.state });
+    }
 });
 
 // Express route to fetch dealer by a particular id
 app.get('/fetchDealer/:id', async (req, res) => {
-//Write your code here
+    try {
+        const documents = await Dealerships.find({id: req.params.id});
+        res.json(documents);
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching dealership according to id: ' + req.params.id });
+    }
 });
 
 //Express route to insert review
