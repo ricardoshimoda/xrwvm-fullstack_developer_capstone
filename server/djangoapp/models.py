@@ -8,12 +8,9 @@ class CarMake(models.Model):
     # if it's luxury, utiity, sport, general
     BRAND_CATEGORIES = [
         ('GENERAL', 'General'),
-        ('SPORT', 'Sport'),
-        ('UTILITY', 'Utility'),
         ('LUXURY', 'Luxury'),
-        ('PROFESSIONAL', 'Professional'),
     ]
-    category = models.CharField(max_length=100)
+    category = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return self.name  # Return the name as the string representation
@@ -31,13 +28,12 @@ class CarModel(models.Model):
         ('CONVERTIBLE', 'Convertible'),
         ('PICKUP', 'Pickup'),
     ]
-    type = models.CharField(max_length=15, choices=CAR_TYPES, default='SUV')
+    type = models.CharField(max_length=20, choices=CAR_TYPES, default='SUV')
     year = models.IntegerField(default=2023,
         validators=[
             MaxValueValidator(2023),
             MinValueValidator(2015)
         ])
-    mileage = models.IntegerField()
 
     def __str__(self):
         return self.name  # Return the name as the string representation
