@@ -94,8 +94,8 @@ def delete_cars(request):
     return JsonResponse({"done": "true"})
 
 
-# Update the `get_dealerships` 
-# render list of dealerships all by default, 
+# Update the `get_dealerships`
+# render list of dealerships all by default,
 # particular state if state is passed
 def get_dealerships(request, state="All"):
     if (state == "All"):
